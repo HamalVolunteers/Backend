@@ -1,6 +1,11 @@
 # Backend
 Python backend for the application
 
+# current tests sidclaimer
+The current tests (i.e CI) reset the DB completly (to not overcrowd it).
+They should be changed to reset a safer envieroment later.
+But it will be dependend on the chosen DB/xRM.
+
 # Backend flow
 1) Recieve an HTTP request from flutter frontend.
 2) Breakdown the request by the given structure.

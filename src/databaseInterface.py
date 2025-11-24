@@ -159,3 +159,17 @@ class DatabaseInterface(ABC):
         - On failure: the string `ERROR`.
         """
         pass
+
+    @abstractmethod
+    def getEventById(self,eventID: int) -> Any:
+        """Retrieve event information by event ID.
+
+        Parameters:
+        - `eventID`: numeric event id.
+
+        Returns:
+        - On success: a `dict` representing the event.
+        - If event not found: an empty `dict` or `None` (implementation choice)
+        - On failure: the string `ERROR`.
+        """
+        pass

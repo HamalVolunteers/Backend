@@ -167,3 +167,12 @@ def test_15_get_event_no_matching_filters():
     res = send("getEventByFilters", {"filters": ["badFilter"]})
     assert res["status"] == "ok"
     assert res["data"] == []
+
+def test_16_get_event_by_id():
+    send("addEvent", {"eventId": 30, "name": "Unique Event", "capacity": 15, "info": "Special event", "filters": ["unique"]})
+    res = send("getEventById", {"eventId": 30})
+    assert res["status"] == "ok"
+    assert res["data"]["name"] == "Unique Event"
+    assert res["data"]["capacity"] == 15
+    assert res["data"]["info"] == "Special event"
+    assert res["data"]["filters"] == ["unique"]

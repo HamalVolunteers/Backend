@@ -153,3 +153,12 @@ class DatabaseImpMongo(DatabaseInterface):
         except errors.PyMongoError:
             return "ERROR"
     
+    def getEventById(self, eventID: int) -> Any:
+        try:
+            event = self.db.events.find_one({"eventId": eventID})
+            if not event:
+                return {}
+            event.pop("_id", None)
+            return dict(event)
+        except errors.PyMongoError:
+            return "ERROR"

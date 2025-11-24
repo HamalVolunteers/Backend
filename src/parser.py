@@ -29,7 +29,8 @@ class Parser:
             "getEventByFilters": self.parseGetEventByFilters,
             "signUserToEvent": self.parseSignUserToEvent,
             "removeUserFromEvent": self.parseRemoveUserFromEvent,
-            "addEvent": self.parseAddEvent
+            "addEvent": self.parseAddEvent,
+            "getEventById": self.parseGetEventById
         }
 
         if action not in handlers:
@@ -151,6 +152,17 @@ class Parser:
             return ERROR
 
         result = self.db.addEvent(int(eventId), str(name), int(capacity), str(info), list(filters))
+        if result == "ERROR":
+            return ERROR
+        return {"status": "ok", "data": result}
+    
+    def parseGetEventById(self, payload: dict) -> dict:
+        eventId = payload.get("eventId")
+
+        if eventId is None:
+            return ERROR
+
+        result = self.db.getEventById(int(eventId))
         if result == "ERROR":
             return ERROR
         return {"status": "ok", "data": result}

@@ -215,3 +215,22 @@ list_of filters is a lists of strings
 res can be:
 1) True- if suceeded
 2) False- event already exists
+## get event by id
+### message structure
+`
+{
+  "action":"getEventById"
+  "payload":{"eventId":<event_id>}
+}
+`
+expects <event_id> to be an integer
+### return structure
+`
+{
+  "status":"ok"
+  "data": <res>
+}
+`
+res can be:
+1) True- if suceeded
+2) False- event doesnt exists

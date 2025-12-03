@@ -199,6 +199,9 @@ res can be:
             "capacity":<capacity>
             "info":<info>
             "filters":<list_of_filters>
+            "location": <string>
+            "date": <string>
+            "duration": <string>
             }
 }
 `
@@ -232,5 +235,5 @@ expects <event_id> to be an integer
 }
 `
 res can be:
-1) True- if suceeded
+1) <event> if succeded
 2) False- event doesnt exists

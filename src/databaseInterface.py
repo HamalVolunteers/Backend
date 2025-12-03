@@ -145,7 +145,7 @@ class DatabaseInterface(ABC):
         pass
 
     @abstractmethod
-    def addEvent(self,eventID: int,name:str,capacity:int,info:str,filters:list[str]) -> Any:
+    def addEvent(self,eventID: int,name:str,capacity:int,info:str,filters:list[str],location:str,date:str,duration:str) -> Any:
         """Add a new event.
 
         Parameters:
@@ -153,6 +153,10 @@ class DatabaseInterface(ABC):
         - `name`: event name.
         - `capacity`: event capacity.
         - `info`: additional event information.
+        - `filters`: list of filter strings associated with the event.
+        - `location`: event location.
+        - `date`: event date.
+        - `duration`: event duration.
 
         Returns:
         - On success: `True`.

@@ -147,11 +147,14 @@ class Parser:
         capacity = payload.get("capacity", 0)
         info = payload.get("info", "")
         filters = payload.get("filters", [])
+        location = payload.get("location", "")
+        date = payload.get("date", "")
+        duration = payload.get("duration", "")
 
         if eventId is None:
             return ERROR
 
-        result = self.db.addEvent(int(eventId), str(name), int(capacity), str(info), list(filters))
+        result = self.db.addEvent(int(eventId), str(name), int(capacity), str(info), list(filters),str(location),str(date),str(duration))
         if result == "ERROR":
             return ERROR
         return {"status": "ok", "data": result}

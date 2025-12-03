@@ -81,7 +81,10 @@ def test_05_add_event():
         "name": "Beach Cleanup",
         "capacity": 3,
         "info": "Help clean the beach",
-        "filters": ["volunteer"]
+        "filters": ["volunteer"],
+        "location": "Beach",
+        "date": "2024-06-01",
+        "duration": "3 hours"
     })
     assert res["status"] == "ok"
     mongo = MongoClient("mongodb+srv://hamalvolunteers:v96o90K2WbJ@hamalcluster.p2wonhv.mongodb.net/?appName=HamalCluster")
@@ -93,6 +96,9 @@ def test_05_add_event():
     assert event["capacity"] == 3
     assert event["info"] == "Help clean the beach"
     assert event["filters"] == ["volunteer"]
+    assert event["location"] == "Beach"
+    assert event["date"] == "2024-06-01"
+    assert event["duration"] == "3 hours"
 
 def test_06_get_event_by_filters():
     res = send("getEventByFilters", {"filters": ["volunteer"]})

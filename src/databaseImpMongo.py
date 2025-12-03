@@ -142,12 +142,12 @@ class DatabaseImpMongo(DatabaseInterface):
         except errors.PyMongoError:
             return "ERROR"
     
-    def addEvent(self,eventID: int,name:str,capacity:int,info:str,filters:list[str]) -> Any:
+    def addEvent(self,eventID: int,name:str,capacity:int,info:str,filters:list[str],location:str,date:str,duration:str) -> Any:
         try:
             existing = self.db.events.find_one({"eventId": eventID})
             if existing:
                 return False
-            event_doc = {"eventId": eventID, "name": name, "capacity": capacity, "currentCapacity": 0, "info": info, "people": [], "filters": filters}
+            event_doc = {"eventId": eventID, "name": name, "capacity": capacity, "currentCapacity": 0, "info": info, "people": [], "filters": filters, "location": location, "date": date, "duration": duration}
             self.db.events.insert_one(event_doc)
             return True
         except errors.PyMongoError:

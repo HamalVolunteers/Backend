@@ -37,6 +37,8 @@ jobs:
       - name: Run tests
         run: |
           pytest tests/ --maxfail=1 --disable-warnings
+        env:
+          PYTHONPATH: src
 
   # -----------------------------
   # 2️⃣ Continuous Deployment (CD)

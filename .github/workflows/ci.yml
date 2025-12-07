@@ -1,21 +1,24 @@
-name: Backend CI
+name: Backend CI/CD
 
-# Trigger on pushes or PRs to main or dev
 on:
   push:
     branches:
-      - main
       - dev
+      - main
+    tags:
+      - 'v*.*.*'
   pull_request:
     branches:
-      - main
       - dev
+      - main
 
 jobs:
+  # -----------------------------
+  # 1️⃣ Continuous Integration (CI)
+  # -----------------------------
   test-backend:
     name: Run Python Backend Tests
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -23,13 +26,38 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install fastapi[all] pymongo pytest
+          pip install -r requirements.txt
+          pip install pytest httpx  # ensure httpx for FastAPI TestClient
 
       - name: Run tests
         run: |
-          pytest tests/test_file.py --maxfail=1 --disable-warnings -q
+          pytest tests/ --maxfail=1 --disable-warnings
+
+  # -----------------------------
+  # 2️⃣ Continuous Deployment (CD)
+  # -----------------------------
+  deploy-backend:
+    name: Deploy Backend on Tag
+    runs-on: ubuntu-latest
+    needs: test-backend
+    if: startsWith(github.ref, 'refs/tags/v')  # only deploy on version tags
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image
+        run: docker build -t my-backend .
+
+      - name: Deploy to Railway
+        uses: railwayapp/cli-action@v1
+        with:
+          railwayToken: ${{ secrets.RAILWAY_TOKEN }}
+          command: up --detach

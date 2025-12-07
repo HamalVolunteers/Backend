@@ -21,4 +21,4 @@ jobs:
         uses: railwayapp/cli-action@v1
         with:
           railwayToken: ${{ secrets.RAILWAY_TOKEN }}
-          command: up --detach name: Backend-CD
+          command: up --detach

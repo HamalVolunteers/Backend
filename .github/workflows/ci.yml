@@ -4,32 +4,36 @@ name: CI/CD FastAPI
 on:
   push:
     branches:
-      - dev    # run CI tests on dev
-      - main   # optional CI on main
+      - dev
+      - main
     tags:
-      - 'v*.*.*'  # deploy only on version tags like v1.0.0
+      - 'v*.*.*'  # deploy only on version tags
+  pull_request:
+    branches:
+      - dev
+      - main
 
 jobs:
-
   # -----------------------------
   # 1️⃣ Continuous Integration (CI)
   # -----------------------------
-  test:
+  test-backend:
+    name: Run Python Backend Tests
     runs-on: ubuntu-latest
-    if: github.ref_name == 'dev' || github.ref_name == 'main'
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
+          pip install pytest
 
       - name: Run tests
         run: |
@@ -38,10 +42,11 @@ jobs:
   # -----------------------------
   # 2️⃣ Continuous Deployment (CD)
   # -----------------------------
-  deploy:
+  deploy-backend:
+    name: Deploy Backend on Tag
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')  # only run on version tags
-    needs: test  # optional, ensures tests pass before deploy
+    needs: test-backend
+    if: startsWith(github.ref, 'refs/tags/v')  # only deploy on tags
     steps:
       - name: Checkout code
         uses: actions/checkout@v3

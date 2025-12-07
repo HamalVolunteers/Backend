@@ -4,9 +4,6 @@ import os
 import sys
 from pymongo import MongoClient
 
-# Allow importing backend/src/main.py
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
-
 from main import app
 
 client = TestClient(app)

@@ -3,5 +3,5 @@ uvicorn[standard]==0.23.2
 pydantic==2.6.0
 python-multipart==0.0.6   # optional, for form/file uploads
 pymongo==4.7.1
-httpx==1.8.0
+httpx
 pytest

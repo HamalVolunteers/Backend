@@ -5,7 +5,7 @@ WORKDIR /app/src
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-COPY src/ .   # everything goes into /app/src
+COPY src/ .
 
 EXPOSE 8000
 

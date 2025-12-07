@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-import parser as parser
+import parser_mod as parser_mod
 from typing import Any
 
 class RequestModel(BaseModel):
@@ -14,7 +14,7 @@ class ResponseModel(BaseModel):
 
 
 app = FastAPI()
-parserObject = parser.Parser()
+parserObject = parser_mod.Parser()
 
 @app.post("/api", response_model=ResponseModel)
 async def handle_request(request: RequestModel):

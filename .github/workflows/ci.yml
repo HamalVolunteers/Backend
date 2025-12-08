@@ -1,22 +1,21 @@
 name: Backend CI/CD
 
-# Trigger on:
-# 1. Pushes or PRs to 'main' or 'dev' (for running tests/CI)
-# 2. Pushes of tags starting with 'v' (for CD)
 on:
+  # CI: Run tests on pushes or PRs to dev/main
   push:
     branches:
       - main
       - dev
     tags:
-      - 'v*' # <--- NEW: Trigger on tags like v1.0, v2.0.1, etc.
+      - 'v*'    # CD: Run deploy only on version tags
   pull_request:
     branches:
       - main
       - dev
 
 jobs:
-  # --- JOB 1: TEST (Unchanged for logic) ---
+
+  # --- JOB 1: TEST ---
   test-backend:
     name: Run Python Backend Tests
     runs-on: ubuntu-latest
@@ -32,35 +31,29 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          # Ensure all necessary packages are installed for CI
           pip install fastapi[all] pymongo pytest httpx
 
       - name: Run tests
-        run: |
-          pytest tests/test_file.py --maxfail=1 --disable-warnings -q
+        run: pytest tests/test_file.py --maxfail=1 --disable-warnings -q
 
----
 
-  # --- JOB 2: DEPLOY (Updated Condition) ---
+  # --- JOB 2: DEPLOY ---
   deploy:
     name: Deploy to Railway
     runs-on: ubuntu-latest
-    needs: test-backend # Ensures tests must pass before deployment starts
-    
-    # 💥 CRUCIAL CHANGE: 
-    # Only run deploy if the job was triggered by a tag push (i.e., 'refs/tags/v*')
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-    
+    needs: test-backend       # CI must pass first
+
+    # Only run deploy WHEN PUSHING A TAG STARTING WITH v
+    if: startsWith(github.ref, 'refs/tags/v')
+
     steps:
-      - name: Checkout repository
-        # Checkout the specific tag that triggered the run
+      - name: Checkout the tag
         uses: actions/checkout@v3
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli
 
-      - name: Deploy
-        # The railway up command deploys the code checked out by the 'checkout' step (the tag)
+      - name: Deploy to Railway
         run: railway up --detach
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

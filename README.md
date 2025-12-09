@@ -237,3 +237,21 @@ expects <event_id> to be an integer
 res can be:
 1) <event> if succeded
 2) False- event doesnt exists
+
+## get all events
+### message structure
+`
+{
+  "action":"getAllEvents"
+  "payload":{}
+}
+`
+### return structure
+`
+{
+  "status":"ok"
+  "data": <res>
+}
+`
+res can be:
+1) <res> lists of events

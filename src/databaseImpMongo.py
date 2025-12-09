@@ -162,3 +162,12 @@ class DatabaseImpMongo(DatabaseInterface):
             return dict(event)
         except errors.PyMongoError:
             return "ERROR"
+    
+    def getAllEvents(self) -> Any:
+        try:
+            events = list(self.db.events.find({}))
+            for e in events:
+                e.pop("_id", None)
+            return [dict(e) for e in events]
+        except errors.PyMongoError:
+            return "ERROR"

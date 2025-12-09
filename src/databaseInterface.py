@@ -177,3 +177,14 @@ class DatabaseInterface(ABC):
         - On failure: the string `ERROR`.
         """
         pass
+
+    @abstractmethod
+    def getAllEvents(self) -> Any:
+        """Retrieve all events from the database.
+
+        Returns:
+        - On success: `list[dict]` where each dict describes an event.
+        - If no events found: empty list.
+        - On failure: the string `ERROR`.
+        """
+        pass
